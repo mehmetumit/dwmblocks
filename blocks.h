@@ -2,13 +2,13 @@
 static const Block blocks[] = {
 	/*Icon*/	/*Command*/		/*Update Interval*/	/*Update Signal*/
 	{"", "gweath",	21600,		0},
-	{"", "gcpu",	1,		0},
-	{"", "gsens",	1,		0},
+	{"", "gcpu",	5,		0},
+	{"", "gsens",	5,		0},
 	{"", "gmem",	5,		0},
 	{"", "gwifi",	1,		0},
-	{"", "gbr",		5,		0},
-	{"", "gsound",	1,		0},
-	{"", "gbat",	1,		0},
+	{"", "gbr",		0,		0},
+	{"", "gsound",	0,		0},
+	{"", "gbat",	5,		0},
 	{"", "gdate",	60,		0},
 };
 
