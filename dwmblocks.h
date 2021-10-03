@@ -3,7 +3,7 @@
 #include<string.h>
 #include<unistd.h>
 #include<signal.h>
-
+#include<sys/wait.h>
 #ifndef NO_X
 #include<X11/Xlib.h>
 #endif
@@ -37,14 +37,14 @@ static Window root;
 static void (*writestatus) () = pstdout;
 #endif
 
-void sighandler(int num);
 void getcmds(int time);
 void getsigcmds(unsigned int signal);
 void setupsignals();
-void sighandler(int signum);
+void sighandler(int signum, siginfo_t *si, void *ucontext);
 int getstatus(char *str, char *last);
 void statusloop();
 void termhandler();
+void chldhandler();
 void pstdout();
 
 typedef struct {
