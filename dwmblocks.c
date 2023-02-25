@@ -2,29 +2,32 @@
 
 //opens process *cmd and stores output in *output
 void getcmd(const Block *block, char *output) {
+	//make sure status is same until output is ready
+	char tempstatus[CMDLENGTH] = {0};
+	char *tempstatusp = tempstatus;
 	if (block->signal)
-		*output++ = block->signal;
-	strcpy(output, block->icon);
+		*tempstatusp++ = block->signal;
+	strcpy(tempstatusp, block->icon);
 	FILE *cmdBlock = popen(block->command, "r");
 	if (!cmdBlock)
 		return;
 	int charOffset = strlen(block->icon);
 	//Merge icon and command output
-	fgets(output+charOffset , CMDLENGTH-charOffset -delimLen, cmdBlock);
-	charOffset = strlen(output);
-	if (charOffset == 0) {
-		//return if block and command output are both empty
-	}else {
+	fgets(tempstatusp+charOffset , CMDLENGTH-charOffset-delimLen, cmdBlock);
+	charOffset = strlen(tempstatusp);
+
+	//if block and command output are both not empty
+	if(charOffset != 0){
 		//only chop off newline if one is present at the end
-		charOffset = output[charOffset-1] == '\n' ? charOffset-1 : charOffset;
-		if (delim[0] != '\0') {
-		//add delim to output
-		strncpy(output+charOffset, delim, delimLen); 
-		} else//no delimeter
-			output[charOffset++] = '\0';
+		charOffset = tempstatusp[charOffset-1] == '\n' ? charOffset-1 : charOffset;
+		if (delim[0] != '\0') {//add delim to output
+			strncpy(tempstatusp+charOffset, delim, delimLen);
+		}
+		else//no delimeter
+			tempstatusp[charOffset++] = '\0';
+		strcpy(output, tempstatus);
 	}
 	pclose(cmdBlock);
-	return;
 }
 
 void getcmds(int time) {
@@ -99,7 +102,7 @@ void pstdout() {
 
 void statusloop() {
 	setupsignals();
-	int time = 0;//69 year uptime not possible to overflow 
+	int time = 0;//69 year uptime not possible to overflow
 	getcmds(-1);
 	while (1) {
 		getcmds(time++);
